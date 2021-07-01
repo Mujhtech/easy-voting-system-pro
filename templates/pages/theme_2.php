@@ -84,7 +84,7 @@
             background-color: rgb(104, 170, 4);
         }
 
-        .ewvwp-modal {
+        .evsystem-modal {
             position: fixed;
             left: 0;
             top: 0;
@@ -97,7 +97,7 @@
             transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
         }
 
-        .ewvwp-modal-content {
+        .evsystem-modal-content {
             position: absolute;
             top: 50%;
             left: 50%;
@@ -108,7 +108,7 @@
             border-radius: 0.5rem;
         }
 
-        .ewvwp-close-button {
+        .evsystem-close-button {
             float: right;
             width: 1.5rem;
             line-height: 1.5rem;
@@ -118,18 +118,18 @@
             background-color: rgb(206, 235, 197);
         }
 
-        .ewvwp-close-button:hover {
+        .evsystem-close-button:hover {
             background-color: rgb(244, 247, 243);
         }
 
-        .ewvwp-show-modal {
+        .evsystem-show-modal {
             opacity: 1;
             visibility: visible;
             transform: scale(1.0);
             transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
         }
 
-        .ewvwp-modal-content div{
+        .evsystem-modal-content div{
             display:flex;
             flex-direction: column;
             padding-top: 35px;
@@ -138,7 +138,7 @@
         }
 
         
-        .ewvwp-modal-content div input{
+        .evsystem-modal-content div input{
             width: 100%;
             padding: 15px;
             padding-left: 10px;
@@ -161,10 +161,10 @@
 
     <?php 
         while ( $loop->have_posts() ) : $loop->the_post();
-        $nickname = get_post_meta(get_the_ID(),"_ewvwp_nickname_value_key",true);
-        $age = get_post_meta(get_the_ID(),"_ewvwp_age_value_key",true);
-        $state = get_post_meta(get_the_ID(),"_ewvwp_state_value_key",true);
-        $vote = get_post_meta(get_the_ID(),"_ewvwp_vote_value_key",true);
+        $nickname = get_post_meta(get_the_ID(),"_evsystem_nickname_value_key",true);
+        $age = get_post_meta(get_the_ID(),"_evsystem_age_value_key",true);
+        $state = get_post_meta(get_the_ID(),"_evsystem_state_value_key",true);
+        $vote = get_post_meta(get_the_ID(),"_evsystem_vote_value_key",true);
     ?>
 
     
@@ -172,28 +172,28 @@
         <div class="vote-item">
             <?php the_post_thumbnail(); ?>
             <span><?php the_title(); ?></span>
-            <?php if(get_option('ewvwp_display_state') == 1): ?>
+            <?php if(get_option('evsystem_display_state') == 1): ?>
             <span>State: <?php echo $state; ?></span>
             <?php endif; ?>
-            <?php if(get_option('ewvwp_display_vote') == 1): ?>
+            <?php if(get_option('evsystem_display_vote') == 1): ?>
             <span>Votes: <?php echo $vote; ?></span>
             <?php endif; ?>
-            <a class="ewvwp-trigger" id="vote-<?php print get_the_ID(); ?>" onclick="return easyWVWPMForm(<?php print get_the_ID(); ?>)">Vote Now</a>
+            <a class="evsystem-trigger" id="vote-<?php print get_the_ID(); ?>" href="<?php the_permalink(); ?>">Vote Now</a>
         </div>
 
     
 
         <?php endwhile; ?>
     </section>
-    <div class="ewvwp-modal">
-        <div class="ewvwp-modal-content">
-            <span class="ewvwp-close-button">&times;</span>
+    <div class="evsystem-modal">
+        <div class="evsystem-modal-content">
+            <span class="evsystem-close-button">&times;</span>
             <div>
-                <form method="post" action="#" id="ewvwp-theme-2-form" onsubmit="return easyWVWPMFormSubmit(event)">
+                <form method="post" action="#" id="evsystem-theme-2-form" onsubmit="return easyWVWPMFormSubmit(event)">
                     <input type="hidden" name="vote-id" value="" id="vote-id">
-                    <input placeholder="Enter your Email" id="ewvwp-email" type="text">
-                    <input type="number" id="ewvwp-number-of-vote" onkeyup="return updateAmount(event)" placeholder="Number of Votes">
-                    <input type="number" id="ewvwp-amount-of-vote" readonly placeholder="Amount">
+                    <input placeholder="Enter your Email" id="evsystem-email" type="text">
+                    <input type="number" id="evsystem-number-of-vote" onkeyup="return updateAmount(event)" placeholder="Number of Votes">
+                    <input type="number" id="evsystem-amount-of-vote" readonly placeholder="Amount">
                     <input type="submit" name="vote" value="Vote">
                 </form>
             </div>
@@ -201,13 +201,13 @@
     </div>
     <script>
             // MODAL BOX JS
-        var modal = document.querySelector(".ewvwp-modal");
-        var trigger = document.querySelector(".ewvwp-trigger");
-        var closeButton = document.querySelector(".ewvwp-close-button");
-        var numberOfVote = document.getElementById("ewvwp-number-of-vote");
+        var modal = document.querySelector(".evsystem-modal");
+        var trigger = document.querySelector(".evsystem-trigger");
+        var closeButton = document.querySelector(".evsystem-close-button");
+        var numberOfVote = document.getElementById("evsystem-number-of-vote");
 
         function toggleModal() {
-            modal.classList.toggle("ewvwp-show-modal");
+            modal.classList.toggle("evsystem-show-modal");
         }
 
         function windowOnClick(event) {
@@ -225,9 +225,9 @@
         function easyWVWPMFormSubmit(event){
             event.preventDefault();
             var id = document.getElementById("vote-id").value;
-            var quantity = document.getElementById("ewvwp-number-of-vote").value;
-            var amount = document.getElementById("ewvwp-amount-of-vote").value;
-            var email = document.getElementById("ewvwp-email").value;
+            var quantity = document.getElementById("evsystem-number-of-vote").value;
+            var amount = document.getElementById("evsystem-amount-of-vote").value;
+            var email = document.getElementById("evsystem-email").value;
             var ajaxurl = "<?php echo admin_url('admin-ajax.php'); ?>";
 
             if (email == "" || quantity == "" ) {
@@ -238,7 +238,7 @@
             }
             
             var handler = PaystackPop.setup({
-                key: '<?php echo get_option( 'ewvwp_paystack_public_key' ); ?>', // Replace with your public key
+                key: '<?php echo get_option( 'evsystem_paystack_public_key' ); ?>', // Replace with your public key
                 email: email,
                 amount: amount * 100, // the amount value is multiplied by 100 to convert to the lowest currency unit
                 currency: 'NGN', // Use GHS for Ghana Cedis or USD for US Dollars
@@ -257,13 +257,13 @@
                         userID : id,
                         reference: reference,
                         email: email,
-                        action: 'ewvwp_form_ajax'
+                        action: 'evsystem_form_ajax'
 
                     },
                     success : function( response ){
                             
                         if(response.success == true){
-                            document.getElementById("ewvwp-theme-2-form").reset();
+                            document.getElementById("evsystem-theme-2-form").reset();
                             alert(response.message);
                             setTimeout(window.location.reload(), 500);
                         } else {
@@ -284,8 +284,8 @@
         function updateAmount(event){
             var quantity = event.target.value;
 
-            var total = quantity * <?php echo get_option('ewvwp_min_amount'); ?>;
-            document.getElementById("ewvwp-amount-of-vote").value = total;
+            var total = quantity * <?php echo get_option('evsystem_min_amount'); ?>;
+            document.getElementById("evsystem-amount-of-vote").value = total;
         }
         //trigger.addEventListener("click", toggleModal);
         closeButton.addEventListener("click", toggleModal);

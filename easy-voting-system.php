@@ -94,4 +94,21 @@
 		return $single_template;
 	}
 
+    add_action( 'admin_notices', 'evsystem_paystack_keys_notice' );
+
+    function evsystem_paystack_keys_notice() {
+        
+        if ( ! current_user_can( 'manage_options' ) ) {
+            return;
+        }
+        $pub_key = get_option( 'evsystem_paystack_public_key' );
+        $secret_key = get_option( 'evsystem_paystack_secret_key' );
+        
+        if ( $pub_key == null || $pub_key == "" || $secret_key == null || $secret_key == " " ) {
+            
+            echo '<div class="error"><p>' . sprintf( __( 'Paystack public and secret key required, Click <strong><a href="%s">here</a></strong> to enter it when you want to start voting on your site.', 'easy-voting-system' ), esc_url( admin_url( 'edit.php?post_type=evsystem&page=evsystem_plugin' ) ) ) . '</p></div>';
+
+        }
+    }
+
     require plugin_dir_path(__FILE__) . 'ajax.php';
