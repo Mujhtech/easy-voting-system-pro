@@ -9,23 +9,23 @@ $taxonomy_id = $contest;
 
 if($contest == "all"){
 	$args = array(
-		'post_type' => 'ewvwp',
+		'post_type' => 'evsystem',
 	    'post_status' => 'publish',
-	    'posts_per_page' => get_option( 'ewvwp_no_of_candidate_per_page' ) ? get_option( 'ewvwp_no_of_candidate_per_page' ) : 10, 
+	    'posts_per_page' => get_option( 'evsystem_no_of_candidate_per_page' ) ? get_option( 'evsystem_no_of_candidate_per_page' ) : 10, 
 	    'orderby' => 'title', 
 	    'order' => 'ASC', 
 	);
 
 } else {
 	$args = array(  
-	    'post_type' => 'ewvwp',
+	    'post_type' => 'evsystem',
 	    'post_status' => 'publish',
-	    'posts_per_page' => get_option( 'ewvwp_no_of_candidate_per_page' ) ? get_option( 'ewvwp_no_of_candidate_per_page' ) : 10, 
+	    'posts_per_page' => get_option( 'evsystem_no_of_candidate_per_page' ) ? get_option( 'evsystem_no_of_candidate_per_page' ) : 10, 
 	    'orderby' => 'title', 
 	    'order' => 'ASC', 
 	    'tax_query' => array(
 		    array(
-		    'taxonomy' => 'ewvwp-category',
+		    'taxonomy' => 'evsystem-category',
 		    'field' => 'term_id',
 		    'terms' => $contest,
 		     ),
@@ -35,8 +35,8 @@ if($contest == "all"){
 
 $loop = new WP_Query( $args );
 
-if(!empty(get_option('ewvwp_template'))){
-	$template = get_option('ewvwp_template');
+if(!empty(get_option('evsystem_template'))){
+	$template = get_option('evsystem_template');
 } else {
 	$template = 1;
 }

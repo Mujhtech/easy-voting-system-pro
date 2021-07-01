@@ -2,10 +2,10 @@
 <div id="ewvwp-grid">
 <?php 
     while ( $loop->have_posts() ) : $loop->the_post();
-    $nickname = get_post_meta(get_the_ID(),"_ewvwp_nickname_value_key",true);
-    $age = get_post_meta(get_the_ID(),"_ewvwp_age_value_key",true);
-    $state = get_post_meta(get_the_ID(),"_ewvwp_state_value_key",true);
-    $vote = get_post_meta(get_the_ID(),"_ewvwp_vote_value_key",true);
+    $nickname = get_post_meta(get_the_ID(),"_evsystem_nickname_value_key",true);
+    $age = get_post_meta(get_the_ID(),"_evsystem_age_value_key",true);
+    $state = get_post_meta(get_the_ID(),"_evsystem_state_value_key",true);
+    $vote = get_post_meta(get_the_ID(),"_evsystem_vote_value_key",true);
 ?>
 
 
@@ -22,15 +22,15 @@
                         <span class="ewvwp_product_name"><?php the_title(); ?></span>    
                         <p><?php echo $nickname; ?></p>                                            
                         
-                        <?php if(get_option('ewvwp_display_vote') == 1 || get_option('ewvwp_display_state') == 1): ?>
+                        <?php if(get_option('evsystem_display_vote') == 1 || get_option('evsystem_display_state') == 1): ?>
                         <div class="product-options">
 
                             
                             <p>
-                                <?php if(get_option('ewvwp_display_state') == 1): ?>
+                                <?php if(get_option('evsystem_display_state') == 1): ?>
                                     <strong>State:</strong> <?php echo $state; ?>
                                 <?php endif; ?>
-                                <?php if(get_option('ewvwp_display_vote') == 1): ?>
+                                <?php if(get_option('evsystem_display_vote') == 1): ?>
                                     <br><strong>Votes:</strong> <?php echo $vote; ?>
                                 <?php endif; ?>
                             </p>
@@ -74,7 +74,7 @@ wp_reset_postdata();
         var amount = $('#amount-'+formid).val();
         var quantity = event.target.value;
 
-        var total = quantity * <?php echo get_option('ewvwp_min_amount'); ?>;
+        var total = quantity * <?php echo get_option('evsystem_min_amount'); ?>;
         $("#amount-"+formid).val(total);
 
     }
@@ -95,7 +95,7 @@ wp_reset_postdata();
 
 
         var handler = PaystackPop.setup({
-            key: '<?php echo get_option( 'ewvwp_paystack_public_key' ); ?>', // Replace with your public key
+            key: '<?php echo get_option( 'evsystem_paystack_public_key' ); ?>', // Replace with your public key
             email: email,
             amount: amount * 100, // the amount value is multiplied by 100 to convert to the lowest currency unit
             currency: 'NGN', // Use GHS for Ghana Cedis or USD for US Dollars
@@ -114,7 +114,7 @@ wp_reset_postdata();
                     userID : formid,
                     reference: reference,
                     email: email,
-                    action: 'ewvwp_form_ajax'
+                    action: 'evsystem_form_ajax'
 
                 },
                 success : function( response ){
