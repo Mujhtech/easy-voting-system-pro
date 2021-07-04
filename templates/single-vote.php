@@ -97,7 +97,7 @@
 										<option value="<?php echo $vc['amount']; ?>"><?php echo $vc['vote']; ?></option>
 									<?php endforeach; ?>
 								</select>
-								<button type="submit" id="evsystem-button"><?php echo get_option('evsystem_vote_button_text'); ?></button>
+								<button type="submit" id="evsystem-button" disbabled="disabled"><?php echo get_option('evsystem_vote_button_text'); ?></button>
 							</form>
 						</div>
 						<?php
@@ -124,11 +124,15 @@
 
 		function evsystemForm(event){
 			event.preventDefault();
-			const amount = parseInt(document.getElementById('evsystem-number').value);
+			const btn_field = document.getElementById('evsystem-button');
+			const amount_field = document.getElementById('evsystem-number');
+			const email_field = document.getElementById('evsystem-email');
+			const amount = parseInt(amount_field.value);
 			const quantity = amount / 50;
 			const ajaxurl = "<?php echo admin_url('admin-ajax.php'); ?>";
-			const email = document.getElementById('evsystem-email').value;
+			const email = email_field.value;
 			const formId = <?php echo get_the_ID(); ?>;
+			const username = "<?php the_title(); ?>";
 
 			if (email == "") {
 
@@ -144,7 +148,9 @@
 				return true;
 			}
 
-
+			amount_field.setAttribute("disabled", true);
+			email_field.setAttribute("disabled", true);
+			btn_field.setAttribute("disabled", true);
 			var handler = PaystackPop.setup({
 				key: '<?php echo get_option( 'evsystem_paystack_public_key' ); ?>',
 				email: email,
@@ -162,7 +168,9 @@
 						quantity : quantity,
 						userID : formId,
 						reference: reference,
+						username: username,
 						email: email,
+						amount: amount,
 						action: 'evsystem_form_ajax'
 
 					},
@@ -170,9 +178,15 @@
 							
 						if(response.success == true){
 							alert(response.message);
-							//setTimeout(window.location.reload(), 500);
+							amount_field.setAttribute("disabled", true);
+							email_field.setAttribute("disabled", true);
+							btn_field.setAttribute("disabled", true);
+							setTimeout(window.location.reload(), 500);
 						} else {
 							alert(response.message);
+							amount_field.setAttribute("disabled", true);
+							email_field.setAttribute("disabled", true);
+							btn_field.setAttribute("disabled", true);
 						}
 					}
 
@@ -180,6 +194,9 @@
 				},
 				onClose: function() {
 					alert('Transaction was not completed, window closed.');
+					amount_field.setAttribute("disabled", true);
+					email_field.setAttribute("disabled", true);
+					btn_field.setAttribute("disabled", true);
 				},
 			});
 			handler.openIframe();

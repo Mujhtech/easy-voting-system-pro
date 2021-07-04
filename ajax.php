@@ -13,8 +13,29 @@
   {
       $quantity = intval($_POST['quantity']);
       $userID = intval($_POST['userID']);
+      $amount = intval($_POST['amount']);
       $reference = sanitize_text_field($_POST['reference']);
       $email = sanitize_email($_POST['email']);
+
+      if(post_exists( $reference,'','','')){
+
+        $trn_id = post_exists( $reference,'','','');
+
+      } else {
+
+        $trn_id = wp_insert_post(array (
+            'post_type' => 'evsystem-transaction',
+            'post_title' => $reference,
+            'post_status' => 'publish',
+        ));
+
+        if ($trn_id) {
+            add_post_meta($trn_id, '_evsystem_transaction_email_value_key', $email);
+            add_post_meta($trn_id, '_evsystem_transaction_amount_value_key', $amount);
+            add_post_meta($trn_id, '_evsystem_transaction_voted_for_value_key', get_the_title( $userID ));
+            add_post_meta($trn_id, '_evsystem_transaction_status_value_key', "Pending");
+        }
+      }
 
       //The parameter after verify/ is the transaction reference to be verified
       $url = 'https://api.paystack.co/transaction/verify/' . $reference;
@@ -45,31 +66,35 @@
               $found_post = get_post($userID);
               $found_post_id = $found_post_title->ID;
 
-              if (false === get_post_status($found_post)) {
+            if (false === get_post_status($found_post)) {
 
-                  $result = array(
-                      'success' => false,
-                      'message' => "Candidate not found",
-                  );
+                $result = array(
+                    'success' => false,
+                    'message' => "Candidate not found",
+                );
 
-                  return wp_send_json($result);
+                return wp_send_json($result);
 
-              } else {
+            } else {
 
-                  $vote = get_post_meta($userID, "_evsystem_vote_value_key", true);
+                $vote = get_post_meta($userID, "_evsystem_vote_value_key", true);
 
-                  $total = $vote + $quantity;
-                  update_post_meta($userID, '_evsystem_vote_value_key', $total);
+                $total = $vote + $quantity;
+                update_post_meta($userID, '_evsystem_vote_value_key', $total);
 
-                  $result = array(
-                      'success' => true,
-                      'message' => "Thanks for voting",
-                  );
+                if ($trn_id) {
+                    update_post_meta($trn_id, '_evsystem_transaction_status_value_key', "Successful");
+                }
 
-                  return wp_send_json($result);
-              }
+                $result = array(
+                    'success' => true,
+                    'message' => "Thanks for voting",
+                );
 
-              return wp_send_json($paystack_response);
+                return wp_send_json($result);
+            }
+
+            return wp_send_json($paystack_response);
 
           } else {
 
@@ -77,6 +102,11 @@
 
           }
       }
+
+      die();
+  }
+
+  function evsystem_update_status(){
 
       die();
   }

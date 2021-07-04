@@ -51,6 +51,7 @@
 
     require plugin_dir_path(__FILE__) . 'functions.php';
     require plugin_dir_path(__FILE__) . 'admin/custom-post-type.php';
+    require plugin_dir_path(__FILE__) . 'admin/transaction-post-type.php';
 
     function evsystem_shortcode($atts, $content = null)
     {
@@ -110,5 +111,16 @@
 
         }
     }
+
+
+    function evsystem_load_admin_scripts(){
+
+        //register js admin section
+        wp_register_script( 'evsystem-admin-script', plugin_dir_url(__FILE__) . 'assets/js/admin.js', array('jquery'), '1.0.0', true );
+
+        wp_enqueue_script( 'evsystem-admin-script' );
+        
+    }
+    add_action( 'admin_enqueue_scripts', 'evsystem_load_admin_scripts' );
 
     require plugin_dir_path(__FILE__) . 'ajax.php';
