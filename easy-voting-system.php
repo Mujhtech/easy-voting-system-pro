@@ -56,7 +56,7 @@
     {
 
         extract(shortcode_atts(
-            array('contest' => 'all'),
+            array('contest' => 'all', 'pagination' => 0),
             $atts,
             'evsystem_plugin'
         ));

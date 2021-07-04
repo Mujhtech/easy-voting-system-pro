@@ -3,37 +3,36 @@
             margin: 20px;
             padding:20px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: auto auto auto auto;
             grid-gap: 1rem;
             justify-content: center;
         }
 
-        .vote-item{
+        .tp-vote-container code .vote-item{
             border-radius: 5px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            border: 1px solid rgb(115, 187, 8);
-            
-            
+            border: 1px solid rgb(16 22 91);
             
         }
 
-        .vote-item img{
-            max-width:320px;
+        .tp-vote-container code .vote-item img{
+            max-width:250px;
+            max-height: 250px;
             padding:20px;
             border-radius: 5px;
         }
 
-        .vote-item span{
+        .tp-vote-container code .vote-item span{
             padding-bottom:10px;
             font-size: 25px;
         }
 
-        .vote-item a{
+        .tp-vote-container code .vote-item a{
             padding-bottom:20px;
-            background-color: rgb(129, 204, 18);
+            background-color: rgb(16 22 91);
             padding-top:10px;
             width:100%;
             text-decoration: none;
@@ -46,9 +45,9 @@
 
         }
 
-        .vote-item a:hover{
+        .tp-vote-container code .vote-item a:hover{
             
-            background-color: rgb(104, 170, 4);
+            background-color: rgb(16 22 91);
             
         }
 
@@ -81,7 +80,7 @@
         section.tp-search-bar button:hover{
             cursor: pointer;
             
-            background-color: rgb(104, 170, 4);
+            background-color: rgb(16 22 91);
         }
 
         .evsystem-modal {
@@ -173,10 +172,10 @@
             <?php the_post_thumbnail(); ?>
             <span><?php the_title(); ?></span>
             <?php if(get_option('evsystem_display_state') == 1): ?>
-            <span>State: <?php echo $state; ?></span>
+            <span><?php echo $state; ?></span>
             <?php endif; ?>
             <?php if(get_option('evsystem_display_vote') == 1): ?>
-            <span>Votes: <?php echo $vote; ?></span>
+            <span><?php echo $vote; ?></span>
             <?php endif; ?>
             <a class="evsystem-trigger" id="vote-<?php print get_the_ID(); ?>" href="<?php the_permalink(); ?>">Vote Now</a>
         </div>

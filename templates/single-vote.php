@@ -110,7 +110,7 @@
 
 			const amount = event.target.value;
 			const current_text = "<?php echo get_option('evsystem_vote_button_text'); ?>";
-			const btn_text = current_text + " N" + amount;
+			const btn_text = "Pay N" + amount + " & " + current_text;
 			const button = document.getElementById('evsystem-button');
 
 			if(amount == null || amount == 0){

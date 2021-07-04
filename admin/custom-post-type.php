@@ -33,26 +33,26 @@
 
 		$messages['evsystem'] = array(
 			0 => '', // Unused. Messages start at index 1.
-			//1 => sprintf(__('Candidate updated.')),
-			1 => sprintf( __('Candidate updated. <a href="%s">View Candidate</a>'), esc_url( get_permalink($post_ID) ) ),
+			//1 => sprintf(__('Contenstant updated.')),
+			1 => sprintf( __('Contenstant updated. <a href="%s">View Contenstant</a>'), esc_url( get_permalink($post_ID) ) ),
 			2 => __('Custom field updated.'),
 			3 => __('Custom field deleted.'),
-			4 => __('Candidate updated.'),
+			4 => __('Contenstant updated.'),
 			/* translators: %s: date and time of the revision */
-			5 => isset($_GET['revision']) ? sprintf(__('Candidate restored to revision from %s'), wp_post_revision_title((int) $_GET['revision'], false)) : false,
-			//6 => sprintf(__('Candidate published.')),
-			6 => sprintf( __('Candidate published. <a href="%s">View Candidate</a>'), esc_url( get_permalink($post_ID) ) ),
-			7 => __('Candidate saved.'),
-			//8 => sprintf(__('Candidate submitted.')),
-			8 => sprintf( __('Candidate submitted. <a target="_blank" href="%s">Preview Candidate</a>'), esc_url( add_query_arg( 'preview', 'true', get_permalink($post_ID) ) ) ),
-			//9 => sprintf(__('Candidate scheduled for: <strong>%1$s</strong>. '),
+			5 => isset($_GET['revision']) ? sprintf(__('Contenstant restored to revision from %s'), wp_post_revision_title((int) $_GET['revision'], false)) : false,
+			//6 => sprintf(__('Contenstant published.')),
+			6 => sprintf( __('Contenstant published. <a href="%s">View Contenstant</a>'), esc_url( get_permalink($post_ID) ) ),
+			7 => __('Contenstant saved.'),
+			//8 => sprintf(__('Contenstant submitted.')),
+			8 => sprintf( __('Contenstant submitted. <a target="_blank" href="%s">Preview Contenstant</a>'), esc_url( add_query_arg( 'preview', 'true', get_permalink($post_ID) ) ) ),
+			//9 => sprintf(__('Contenstant scheduled for: <strong>%1$s</strong>. '),
 				// translators: Publish box date format, see http://php.net/date
 				//date_i18n(__('M j, Y @ G:i'), strtotime($post->post_date))),
-			9 => sprintf( __('Candidate scheduled for: <strong>%1$s</strong>. <a target="_blank" href="%2$s">Preview Candidate</a>'),
+			9 => sprintf( __('Contenstant scheduled for: <strong>%1$s</strong>. <a target="_blank" href="%2$s">Preview Contenstant</a>'),
 			// translators: Publish box date format, see http://php.net/date
 			date_i18n( __( 'M j, Y @ G:i' ), strtotime( $post->post_date ) ), esc_url( get_permalink($post_ID) ) ),
-			//10 => sprintf(__('Candidate draft updated.')),
-			10 => sprintf( __('Candidate draft updated. <a target="_blank" href="%s">Preview Candidate</a>'), esc_url( add_query_arg( 'preview', 'true', get_permalink($post_ID) ) ) ),
+			//10 => sprintf(__('Contenstant draft updated.')),
+			10 => sprintf( __('Contenstant draft updated. <a target="_blank" href="%s">Preview Contenstant</a>'), esc_url( add_query_arg( 'preview', 'true', get_permalink($post_ID) ) ) ),
 		);
 
 		return $messages;
@@ -91,7 +91,7 @@
 			'name' => __('Contest'),
 			'shortcode' => __('Shortcode'),
 			'description' => __('Description'),
-			'posts' => __('Candidates'),
+			'posts' => __('Contenstants'),
 		);
 		return $new_columns;
 	}
@@ -130,15 +130,15 @@
 		}
 
 		// see get_post_type_labels()
-		$p_object->labels->add_new = 'Add Candidate';
-		$p_object->labels->add_new_item = 'Add New Candidate';
-		$p_object->labels->all_items = 'All Candidate';
-		$p_object->labels->edit_item = 'Edit Candidate';
-		$p_object->labels->new_item = 'New Candidate';
-		$p_object->labels->not_found = 'No Candidates found';
-		$p_object->labels->not_found_in_trash = 'No Candidates found in trash';
-		$p_object->labels->search_items = 'Search Candidates';
-		$p_object->labels->view_item = 'View Candidate';
+		$p_object->labels->add_new = 'Add Contenstant';
+		$p_object->labels->add_new_item = 'Add New Contenstant';
+		$p_object->labels->all_items = 'All Contenstants';
+		$p_object->labels->edit_item = 'Edit Contenstant';
+		$p_object->labels->new_item = 'New Contenstant';
+		$p_object->labels->not_found = 'No Contenstants found';
+		$p_object->labels->not_found_in_trash = 'No Contenstants found in trash';
+		$p_object->labels->search_items = 'Search Contenstants';
+		$p_object->labels->view_item = 'View Contenstant';
 
 		return true;
 	}
@@ -163,7 +163,7 @@
 			'publicly_queryable' => true,
 			'menu_icon' => 'dashicons-megaphone',
 			'supports' => array('title', 'thumbnail'),
-			'rewrite' => array('slug' => 'contenstants')
+			'rewrite' => array('slug' => 'vote')
 		);
 
 		register_post_type('evsystem', $args);
@@ -177,7 +177,7 @@
 		$clientColumns['nickname'] = 'Nick Name';
 		$clientColumns['state'] = 'State';
 		$clientColumns['age'] = 'Age';
-		$clientColumns['occupation'] = 'Occupation';
+		$clientColumns['occupation'] = 'Occupation/Professional';
 		$clientColumns['votes'] = 'Number of votes';
 		$clientColumns['taxonomy'] = 'Contest Category';
 		return $clientColumns;
@@ -216,10 +216,13 @@
 			case 'taxonomy':
 				$terms = get_the_terms($post_id, 'evsystem-category');
 				$draught_links = array();
-				foreach ($terms as $term) {
-					$draught_links[] = $term->name;
+				$on_draught = '';
+				if(!empty($terms)){
+					foreach ($terms as $term) {
+						$draught_links[] = $term->name;
+					}
+					$on_draught = join(", ", $draught_links);
 				}
-				$on_draught = join(", ", $draught_links);
 				printf($on_draught);
 				break;
 		}
@@ -232,7 +235,7 @@
 		add_meta_box('evsystem_age', 'Age', 'evsystem_age_callback', 'evsystem', 'normal');
 		add_meta_box('evsystem_votes', 'Number of Votes', 'evsystem_vote_callback', 'evsystem', 'normal');
 		add_meta_box('evsystem_state', 'State', 'evsystem_state_callback', 'evsystem', 'normal');
-		add_meta_box('evsystem_occupation', 'Occupation', 'evsystem_occupation_callback', 'evsystem', 'normal');
+		add_meta_box('evsystem_occupation', 'Occupation/Professional', 'evsystem_occupation_callback', 'evsystem', 'normal');
 	}
 
 	function evsystem_nickname_callback($post)
@@ -278,7 +281,7 @@
 		wp_nonce_field('evsystem_save_occupation_data', 'evsystem_occupation_meta_box_nonce');
 		$value = get_post_meta($post->ID, '_evsystem_occupation_value_key', true);
 
-		echo '<label for="evsystem_occupation_field"> Occupation </label><br><br> ';
+		echo '<label for="evsystem_occupation_field"> Occupation/Professional </label><br><br> ';
 		echo '<input type="text" name="evsystem_occupation_field" id="evsystem_occupation_field" value="' . esc_attr($value) . '" size="25"/>';
 	}
 

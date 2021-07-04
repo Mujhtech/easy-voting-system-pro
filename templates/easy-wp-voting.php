@@ -6,13 +6,15 @@
  */
 
 $taxonomy_id = $contest;
+$page = $pagination;
 
 if($contest == "all"){
 	$args = array(
 		'post_type' => 'evsystem',
 	    'post_status' => 'publish',
 	    'posts_per_page' => get_option( 'evsystem_no_of_candidate_per_page' ) ? get_option( 'evsystem_no_of_candidate_per_page' ) : 10, 
-	    'orderby' => 'title', 
+	    'meta_key'   => '_evsystem_vote_value_key',
+    	'orderby'    => '_evsystem_vote_value_key', 
 	    'order' => 'ASC', 
 	);
 
@@ -21,14 +23,15 @@ if($contest == "all"){
 	    'post_type' => 'evsystem',
 	    'post_status' => 'publish',
 	    'posts_per_page' => get_option( 'evsystem_no_of_candidate_per_page' ) ? get_option( 'evsystem_no_of_candidate_per_page' ) : 10, 
-	    'orderby' => 'title', 
+	    'meta_key'   => '_evsystem_vote_value_key',
+    	'orderby'    => '_evsystem_vote_value_key',
 	    'order' => 'ASC', 
 	    'tax_query' => array(
 		    array(
 		    'taxonomy' => 'evsystem-category',
 		    'field' => 'term_id',
 		    'terms' => $contest,
-		     ),
+		    ),
 		),
 	);
 }
