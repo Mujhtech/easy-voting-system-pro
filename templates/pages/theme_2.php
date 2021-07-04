@@ -1,9 +1,9 @@
     <style>
-        .tp-vote-container {
+        .tp-vote-container code {
             margin: 20px;
             padding:20px;
             display: grid;
-            grid-template-columns: auto auto auto auto;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             grid-gap: 1rem;
             justify-content: center;
         }
@@ -27,7 +27,7 @@
 
         .tp-vote-container code .vote-item span{
             padding-bottom:10px;
-            font-size: 25px;
+            font-size: 23px;
         }
 
         .tp-vote-container code .vote-item a{
@@ -158,27 +158,27 @@
     <section class="tp-vote-container">
     
 
-    <?php 
-        while ( $loop->have_posts() ) : $loop->the_post();
-        $nickname = get_post_meta(get_the_ID(),"_evsystem_nickname_value_key",true);
-        $age = get_post_meta(get_the_ID(),"_evsystem_age_value_key",true);
-        $state = get_post_meta(get_the_ID(),"_evsystem_state_value_key",true);
-        $vote = get_post_meta(get_the_ID(),"_evsystem_vote_value_key",true);
-    ?>
+        <?php 
+            while ( $loop->have_posts() ) : $loop->the_post();
+            $nickname = get_post_meta(get_the_ID(),"_evsystem_nickname_value_key",true);
+            $age = get_post_meta(get_the_ID(),"_evsystem_age_value_key",true);
+            $state = get_post_meta(get_the_ID(),"_evsystem_state_value_key",true);
+            $vote = get_post_meta(get_the_ID(),"_evsystem_vote_value_key",true);
+        ?>
 
     
 
-        <div class="vote-item">
-            <?php the_post_thumbnail(); ?>
-            <span><?php the_title(); ?></span>
-            <?php if(get_option('evsystem_display_state') == 1): ?>
-            <span><?php echo $state; ?></span>
-            <?php endif; ?>
-            <?php if(get_option('evsystem_display_vote') == 1): ?>
-            <span><?php echo $vote; ?></span>
-            <?php endif; ?>
-            <a class="evsystem-trigger" id="vote-<?php print get_the_ID(); ?>" href="<?php the_permalink(); ?>">Vote Now</a>
-        </div>
+            <div class="vote-item">
+                <?php the_post_thumbnail(); ?>
+                <span><?php the_title(); ?></span>
+                <?php if(get_option('evsystem_display_state') == 1): ?>
+                <span><?php echo $state; ?></span>
+                <?php endif; ?>
+                <?php if(get_option('evsystem_display_vote') == 1): ?>
+                <span><?php echo $vote; ?></span>
+                <?php endif; ?>
+                <a class="evsystem-trigger" id="vote-<?php print get_the_ID(); ?>" href="<?php the_permalink(); ?>">Vote Now</a>
+            </div>
 
     
 

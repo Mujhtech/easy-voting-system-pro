@@ -19,7 +19,7 @@
 
 		.evsystem-column {
 			flex: 1;
-			border: 1px solid gray;
+			/* border: 1px solid gray; */
 			margin: 2px;
 			padding: 10px;
 			&:first-child { margin-left: 0; }
@@ -80,8 +80,9 @@
 							<?php the_post_thumbnail(); ?>
 						</div>
 						<div class="evsystem-column">
+							<h4><?php echo $nickname; ?></h4>
 							<h1><?php the_title(); ?></h1>
-							<h4>Nickname: <?php echo $nickname; ?></h4>
+							<h4><?php echo $occupation; ?></h4>
 							<?php if(get_option('evsystem_display_state') == 1): ?>
                                 <strong>State:</strong> <?php echo $state; ?>
                             <?php endif; ?>
@@ -127,10 +128,18 @@
 			const quantity = amount / 50;
 			const ajaxurl = "<?php echo admin_url('admin-ajax.php'); ?>";
 			const email = document.getElementById('evsystem-email').value;
+			const formId = <?php echo get_the_ID(); ?>;
 
-			if (email == "" || quantity == "" ) {
+			if (email == "") {
 
-				alert("Fill the necessary details");
+				alert("Please enter your email address");
+
+				return true;
+			}
+
+			if (quantity == "") {
+
+				alert("Please select vote category");
 
 				return true;
 			}
@@ -151,7 +160,7 @@
 					data : {
 
 						quantity : quantity,
-						userID : formid,
+						userID : formId,
 						reference: reference,
 						email: email,
 						action: 'evsystem_form_ajax'
@@ -161,7 +170,7 @@
 							
 						if(response.success == true){
 							alert(response.message);
-							setTimeout(window.location.reload(), 500);
+							//setTimeout(window.location.reload(), 500);
 						} else {
 							alert(response.message);
 						}
