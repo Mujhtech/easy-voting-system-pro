@@ -23,6 +23,31 @@
 
     add_action('save_post', 'evsystem_transaction_save_voted_for_data');
 
+    add_action('wp_loaded', 'evsystem_transaction_change_place_labels', 20);
+
+
+    function evsystem_transaction_change_place_labels()
+	{
+		$p_object = get_post_type_object('evsystem-transaction');
+
+		if (!$p_object) {
+			return false;
+		}
+
+		// see get_post_type_labels()
+		$p_object->labels->add_new = 'Add Transaction';
+		$p_object->labels->add_new_item = 'Add New Transaction';
+		$p_object->labels->all_items = 'All Transactions';
+		$p_object->labels->edit_item = 'Edit Transaction';
+		$p_object->labels->new_item = 'New Transaction';
+		$p_object->labels->not_found = 'No Transactions found';
+		$p_object->labels->not_found_in_trash = 'No Transactions found in trash';
+		$p_object->labels->search_items = 'Search Transactions';
+		$p_object->labels->view_item = 'View Transaction';
+
+		return true;
+	}
+
     function evsystem_transaction_post_type()
 	{
 		$labels = array(
