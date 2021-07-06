@@ -30,6 +30,7 @@
 		register_setting('evsystem-group', 'evsystem_template');
 		register_setting('evsystem-group', 'evsystem_no_of_candidate_per_page');
 		register_setting('evsystem-group', 'evsystem_vote_button_text');
+		register_setting('evsystem-group', 'evsystem_enable_free_vote');
 
 		add_settings_section('evsystem-form-plugin', 'Settings', 'evsystem_plugin_settings', 'evsystem_plugin');
 
@@ -48,6 +49,9 @@
 		add_settings_field('evsystem-secret-key', 'Paystack Secret Key', 'evsystem_paystack_secret_key_input', 'evsystem_plugin', 'evsystem-form-plugin');
 
 		add_settings_field('evsystem-vote-button-text', 'Vote button text', 'evsystem_vote_button_text_input', 'evsystem_plugin', 'evsystem-form-plugin');
+
+
+		add_settings_field('evsystem-enable-free-vote', 'Enable Free Vote', 'evsystem_enable_free_vote_input', 'evsystem_plugin', 'evsystem-form-plugin');
 	}
 
 	function evsystem_setting_page()
@@ -70,6 +74,12 @@
 	{
 		$option = get_option('evsystem_paystack_public_key');
 		echo '<input type="text" name="evsystem_paystack_public_key" value="' . $option . '" id="evsystem_paystack_public_key"/>';
+	}
+
+	function evsystem_enable_free_vote_input(){
+		$option = get_option('evsystem_enable_free_vote');
+		$checked = (@$option == 1 ? 'checked' : '');
+		echo '<label><input type="checkbox" name="evsystem_enable_free_vote" value="1" id="evsystem_enable_free_vote" ' . $checked . ' /></label>';
 	}
 
 	function evsystem_display_vote_input()

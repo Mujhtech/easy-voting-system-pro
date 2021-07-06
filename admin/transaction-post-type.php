@@ -86,8 +86,39 @@
 		$clientColumns['email'] = 'Email Address';
         $clientColumns['amount'] = 'Amount Paid';
 		$clientColumns['voted_for'] = 'Voted For';
+		$clientColumns['vote'] = 'Vote';
 		$clientColumns['status'] = 'Status';
 		return $clientColumns;
+
+	}
+
+	function evsystem_get_vote($amount) {
+
+		$v_categories = array(
+			array('amount' => 500,     'vote'	=> 10),
+			array('amount' => 5000,    'vote'	=> 100),
+			array('amount' => 10000,   'vote' 	=> 1000),
+			array('amount' => 25000,   'vote' 	=> 10000),
+			array('amount' => 50000,   'vote' 	=> 25000),
+			array('amount' => 100000,  'vote' 	=> 100000),
+			array('amount' => 150000,  'vote' 	=> 200000),
+			array('amount' => 250000,  'vote' 	=> 500000),
+			array('amount' => 500000,  'vote' 	=> 1000000),
+			array('amount' => 1000000, 'vote' 	=> 2000000),
+		);
+
+		$vote = 0;
+		$amount += 0;
+		foreach($v_categories as $vc){
+
+			if($vc['amount'] == $amount){
+				$vote += $vc['vote'];
+				break;
+			}
+
+		}
+
+		return $vote;
 
 	}
 
@@ -108,12 +139,17 @@
 
             case 'amount':
                 $value = get_post_meta($post_id, '_evsystem_transaction_amount_value_key', true);
-                echo '<strong>' . $value . '</strong>';
+                echo '<strong>₦' . $value . '</strong>';
                 break;
 
 			case 'voted_for':
 				$value = get_post_meta($post_id, '_evsystem_transaction_voted_for_value_key', true);
 				echo '<strong>' . $value . '</strong>';
+				break;
+			
+			case 'vote':
+				$value = get_post_meta($post_id, '_evsystem_transaction_amount_value_key', true);
+				echo '<strong>' . evsystem_get_vote($value) . '</strong>';
 				break;
 
 			case 'status':

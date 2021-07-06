@@ -91,13 +91,8 @@
                             <?php endif; ?>
 							<form onsubmit="return evsystemForm(event)">
 								<input type="email" id="evsystem-email" placeholder="Enter your email">
-								<select id="evsystem-number" onChange="return updateAmount(event)">
-									<option value="0">Select Vote</option>
-									<?php foreach($v_categories as $vc): ?>
-										<option value="<?php echo $vc['amount']; ?>"><?php echo $vc['vote']; ?></option>
-									<?php endforeach; ?>
-								</select>
-								<button type="submit" id="evsystem-button" disbabled="disabled"><?php echo get_option('evsystem_vote_button_text'); ?></button>
+								<input type="number" id="evsystem-number" placeholder="Enter numbers of vote" onkeyup="return updateAmount(event)">
+								<input type="submit" id="evsystem-button" value="<?php echo get_option('evsystem_vote_button_text'); ?>">
 							</form>
 						</div>
 						<?php
@@ -109,15 +104,16 @@
 
 		function updateAmount(event){
 
-			const amount = event.target.value;
+			const quantity = event.target.value;
+			const total = quantity * <?php echo get_option('evsystem_min_amount'); ?>;
 			const current_text = "<?php echo get_option('evsystem_vote_button_text'); ?>";
-			const btn_text = "Pay N" + amount + " & " + current_text;
+			const btn_text = "Pay ₦" + total + " & " + current_text;
 			const button = document.getElementById('evsystem-button');
 
-			if(amount == null || amount == 0){
-				button.innerText = current_text;
+			if(total == null || total == 0){
+				button.value = current_text;
 			} else {
-				button.innerText = btn_text;
+				button.value = btn_text;
 			}
 
 		}
@@ -125,10 +121,9 @@
 		function evsystemForm(event){
 			event.preventDefault();
 			const btn_field = document.getElementById('evsystem-button');
-			const amount_field = document.getElementById('evsystem-number');
+			const quantity_field = document.getElementById('evsystem-number');
 			const email_field = document.getElementById('evsystem-email');
-			const amount = parseInt(amount_field.value);
-			const quantity = amount / 50;
+			const amount = parseInt(quantity_field.value) * <?php echo get_option('evsystem_min_amount'); ?>;
 			const ajaxurl = "<?php echo admin_url('admin-ajax.php'); ?>";
 			const email = email_field.value;
 			const formId = <?php echo get_the_ID(); ?>;
@@ -148,7 +143,7 @@
 				return true;
 			}
 
-			amount_field.setAttribute("disabled", true);
+			quantity_field.setAttribute("disabled", true);
 			email_field.setAttribute("disabled", true);
 			btn_field.setAttribute("disabled", true);
 			var handler = PaystackPop.setup({
@@ -165,7 +160,7 @@
 					dataType: 'json',
 					data : {
 
-						quantity : quantity,
+						quantity : quantity_field.value,
 						userID : formId,
 						reference: reference,
 						username: username,
@@ -178,13 +173,13 @@
 							
 						if(response.success == true){
 							alert(response.message);
-							amount_field.setAttribute("disabled", true);
+							quantity_field.setAttribute("disabled", true);
 							email_field.setAttribute("disabled", true);
 							btn_field.setAttribute("disabled", true);
 							setTimeout(window.location.reload(), 500);
 						} else {
 							alert(response.message);
-							amount_field.setAttribute("disabled", true);
+							quantity_field.setAttribute("disabled", true);
 							email_field.setAttribute("disabled", true);
 							btn_field.setAttribute("disabled", true);
 						}
@@ -194,7 +189,7 @@
 				},
 				onClose: function() {
 					alert('Transaction was not completed, window closed.');
-					amount_field.setAttribute("disabled", true);
+					quantity_field.setAttribute("disabled", true);
 					email_field.setAttribute("disabled", true);
 					btn_field.setAttribute("disabled", true);
 				},

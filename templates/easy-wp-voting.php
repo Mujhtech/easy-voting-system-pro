@@ -79,7 +79,8 @@
 	if ($contest != "all") {
 		echo '<h1>'.$term_name.'</h1>';
 	}
-	include 'pages/theme_'.$template.'.php';
+	//include 'pages/theme_'.$template.'.php';
+	include 'pages/theme_2.php';
 
 ?>
 

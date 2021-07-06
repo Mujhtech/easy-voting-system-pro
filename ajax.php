@@ -79,7 +79,7 @@
 
                 $vote = get_post_meta($userID, "_evsystem_vote_value_key", true);
 
-                $total = $vote + $quantity;
+                $total = $vote + evsystem_fetch_vote($amount);
                 update_post_meta($userID, '_evsystem_vote_value_key', $total);
 
                 if ($trn_id) {
@@ -106,7 +106,32 @@
       die();
   }
 
-  function evsystem_update_status(){
+  function evsystem_fetch_vote($amount) {
 
-      die();
-  }
+    $v_categories = array(
+        array('amount' => 500,     'vote'	=> 10),
+        array('amount' => 5000,    'vote'	=> 100),
+        array('amount' => 10000,   'vote' 	=> 1000),
+        array('amount' => 25000,   'vote' 	=> 10000),
+        array('amount' => 50000,   'vote' 	=> 25000),
+        array('amount' => 100000,  'vote' 	=> 100000),
+        array('amount' => 150000,  'vote' 	=> 200000),
+        array('amount' => 250000,  'vote' 	=> 500000),
+        array('amount' => 500000,  'vote' 	=> 1000000),
+        array('amount' => 1000000, 'vote' 	=> 2000000),
+    );
+
+    $vote = 0;
+    $amount += 0;
+    foreach($v_categories as $vc){
+
+        if($vc['amount'] == $amount){
+            $vote += $vc['vote'];
+            break;
+        }
+
+    }
+
+    return $vote;
+
+}
