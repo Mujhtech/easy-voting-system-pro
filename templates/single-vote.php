@@ -89,9 +89,9 @@
                             <?php if(get_option('evsystem_display_vote') == 1): ?>
                                 <br><strong>Votes:</strong> <?php echo $vote; ?>
                             <?php endif; ?>
-							<form onsubmit="return evsystemForm(event)">
+							<form onsubmit="return <?php if(get_option('evsystem_enable_free_vote') == 1): ?>evsystemFree(event)<?php else: ?>evsystemForm(event)<?php endif; ?>">
 								<input type="email" id="evsystem-email" placeholder="Enter your email">
-								<input type="number" id="evsystem-number" placeholder="Enter numbers of vote" onkeyup="return updateAmount(event)">
+								<input type="number" id="evsystem-number" placeholder="Enter numbers of vote" <?php if(get_option('evsystem_enable_free_vote') == 0): ?>onkeyup="return updateAmount(event)"<?php endif; ?>>
 								<input type="submit" id="evsystem-button" value="<?php echo get_option('evsystem_vote_button_text'); ?>">
 							</form>
 						</div>
@@ -195,6 +195,69 @@
 				},
 			});
 			handler.openIframe();
+			
+		}
+
+
+		function evsystemFree(event){
+			event.preventDefault();
+			const btn_field = document.getElementById('evsystem-button');
+			const quantity_field = document.getElementById('evsystem-number');
+			const email_field = document.getElementById('evsystem-email');
+			const ajaxurl = "<?php echo admin_url('admin-ajax.php'); ?>";
+			const email = email_field.value;
+			const quantity = quantity_field.value;
+			const formId = <?php echo get_the_ID(); ?>;
+			const username = "<?php the_title(); ?>";
+
+			if (email == "") {
+
+				alert("Please enter your email address");
+
+				return true;
+			}
+
+			if (quantity == "") {
+
+				alert("Please select vote category");
+
+				return true;
+			}
+
+			quantity_field.setAttribute("disabled", true);
+			email_field.setAttribute("disabled", true);
+			btn_field.setAttribute("disabled", true);
+
+			jQuery.ajax({
+				url : ajaxurl,
+				type : 'post',
+				dataType: 'json',
+				data : {
+
+					quantity : quantity,
+					userID : formId,
+					username: username,
+					email: email,
+					action: 'evsystem_free_ajax'
+
+				},
+				success : function( response ){
+							
+					if(response.success == true){
+						alert(response.message);
+						quantity_field.setAttribute("disabled", true);
+						email_field.setAttribute("disabled", true);
+						btn_field.setAttribute("disabled", true);
+						setTimeout(window.location.reload(), 500);
+					} else {
+						alert(response.message);
+						quantity_field.setAttribute("disabled", true);
+						email_field.setAttribute("disabled", true);
+						btn_field.setAttribute("disabled", true);
+					}
+				}
+
+			});
 			
 		}
 

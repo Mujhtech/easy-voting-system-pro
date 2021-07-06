@@ -23,6 +23,8 @@
 
     add_action('save_post', 'evsystem_transaction_save_voted_for_data');
 
+	add_action('save_post', 'evsystem_transaction_save_quantity_data');
+
     add_action('wp_loaded', 'evsystem_transaction_change_place_labels', 20);
 
 
@@ -148,8 +150,8 @@
 				break;
 			
 			case 'vote':
-				$value = get_post_meta($post_id, '_evsystem_transaction_amount_value_key', true);
-				echo '<strong>' . evsystem_get_vote($value) . '</strong>';
+				$value = get_post_meta($post_id, '_evsystem_transaction_quantity_value_key', true) ;
+				echo '<strong>' . $value . '</strong>';
 				break;
 
 			case 'status':
@@ -167,7 +169,17 @@
 		add_meta_box('evsystem_transaction_amount', 'Amount', 'evsystem_transaction_amount_callback', 'evsystem-transaction', 'normal');
 		add_meta_box('evsystem_transaction_voted_for', 'Voted For', 'evsystem_transaction_voted_for_callback', 'evsystem-transaction', 'normal');
 		add_meta_box('evsystem_transaction_status', 'Status', 'evsystem_transaction_status_callback', 'evsystem-transaction', 'normal');
+		add_meta_box('evsystem_transaction_quantity', 'Quantity', 'evsystem_transaction_quantity_callback', 'evsystem-transaction', 'normal');
 
+	}
+
+	function evsystem_transaction_quantity_callback($post)
+	{
+		wp_nonce_field('evsystem_transaction_save_quantity_data', 'evsystem_transaction_quantity_meta_box_nonce');
+		$value = get_post_meta($post->ID, '_evsystem_transaction_quantity_value_key', true);
+
+		echo '<label for="evsystem_transaction_quantity_field"> Quantity </label><br><br> ';
+		echo '<input type="number" name="evsystem_transaction_quantity_field" id="evsystem_transaction_quantity_field" value="' . esc_attr($value) . '" size="25"/>';
 	}
 
     function evsystem_transaction_email_callback($post)
@@ -205,6 +217,32 @@
 
 		echo '<label for="evsystem_transaction_status_field"> Voted For </label><br><br> ';
 		echo '<input type="text" name="evsystem_transaction_status_field" id="evsystem_transaction_status_field" value="' . esc_attr($value) . '" size="25"/>';
+	}
+
+
+	function evsystem_transaction_save_quantity_data($post_id)
+	{
+
+		if (!isset($_POST['evsystem_transaction_quantity_meta_box_nonce'])) {
+			return;
+		}
+		if (!wp_verify_nonce($_POST['evsystem_transaction_quantity_meta_box_nonce'], 'evsystem_transaction_save_quantity_data')) {
+			return;
+		}
+		if (define('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+			return;
+		}
+		if (!current_user_can('edit_post', $post_id)) {
+			return;
+		}
+		if (!isset($_POST['evsystem_transaction_quantity_field'])) {
+			return;
+		}
+
+		$my_data = sanitize_text_field($_POST['evsystem_transaction_quantity_field']);
+
+		update_post_meta($post_id, '_evsystem_transaction_quantity_value_key', $my_data);
+
 	}
 
 
