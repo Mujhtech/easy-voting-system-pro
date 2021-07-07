@@ -117,7 +117,7 @@
         $userID = intval($_POST['userID']);
         $email = sanitize_email($_POST['email']);
 
-        $reference = "FREE-";
+        $reference = "FREE-".microtime();
 
         if(post_exists( $reference,'','','')){
 

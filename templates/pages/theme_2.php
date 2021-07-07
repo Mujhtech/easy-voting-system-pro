@@ -1,5 +1,5 @@
     <style>
-        .tp-vote-container code {
+        .tp-vote-container {
             margin: 20px;
             padding:20px;
             display: grid;
@@ -8,7 +8,7 @@
             justify-content: center;
         }
 
-        .tp-vote-container code .vote-item{
+        .tp-vote-container .vote-item{
             border-radius: 5px;
             display: flex;
             flex-direction: column;
@@ -18,19 +18,19 @@
             
         }
 
-        .tp-vote-container code .vote-item img{
+        .tp-vote-container .vote-item img{
             max-width:250px;
             max-height: 250px;
             padding:20px;
             border-radius: 5px;
         }
 
-        .tp-vote-container code .vote-item span{
+        .tp-vote-container .vote-item span{
             padding-bottom:10px;
             font-size: 23px;
         }
 
-        .tp-vote-container code .vote-item a{
+        .tp-vote-container .vote-item a{
             padding-bottom:20px;
             background-color: rgb(16 22 91);
             padding-top:10px;
@@ -45,7 +45,7 @@
 
         }
 
-        .tp-vote-container code .vote-item a:hover{
+        .tp-vote-container .vote-item a:hover{
             
             background-color: rgb(16 22 91);
             
